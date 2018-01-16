@@ -101,7 +101,7 @@ class solver: public iterator
 		int dynSysState(double time,const double x[],double xp[]);
 		/** Returns the dynamic equations of the costate. */
 		int dynSysCostate(double t,const double y[],double ydot[]);
-		/** Returns the equivalent integral defined by the Krotov's method. */
+		/** Returns the equivalent integrant defined by the Krotov's method. */
 		virtual double R(double t,const double xin[],const double uin[]);
 		/** A debug function. */
 		virtual void testR(double t,const double x[],const double u[],int level=1);
