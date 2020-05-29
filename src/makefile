@@ -30,15 +30,18 @@ all: 	libiteratorgdb.a libgslodeeventgdb.a \
 							$(SRCKRVITER:%.cpp=%.o) \
 							$(SRCGSLEVENT:%.cpp=%.o) \
 							$(SRCSOLCONT:%.cpp=%.o) 
+	-cd ../ && mkdir build
+	-cd ../ && mkdir build/include
+	-cd ../ && mkdir build/lib
 
-	cp iterator.h 			~/programacion/include/	
-	cp solver.h 			~/programacion/include/	
-	cp affinesys.h 			~/programacion/include/	
-	cp gslodeevent.h 		~/programacion/include/	
-	cp csolcont.h 			~/programacion/include/	
-	cp indexvector.h 		~/programacion/include/	
-	mv libkrotovch6gdb.a 	~/programacion/lib
-	mv libkrotovch6.a 		~/programacion/lib
+	cp iterator.h 			../build/include/	
+	cp solver.h 			../build/include/	
+	cp affinesys.h 			../build/include/	
+	cp gslodeevent.h 		../build/include/	
+	cp csolcont.h 			../build/include/	
+	cp indexvector.h 		../build/include/	
+	mv libkrotovch6gdb.a 	../build/lib
+	mv libkrotovch6.a 		../build/lib
 	
 
 opt: 	libiterator.a libgslodeevent.a \
