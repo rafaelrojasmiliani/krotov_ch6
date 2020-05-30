@@ -1,15 +1,9 @@
 /*!
  *       \file:  iterator.h
- *
- *		 \brief: DESCRIPTION
- *        Version:  1.0
+ *		 \brief: This file contains the definition of the class which represent
+ *		 the process of iteration of the optimizers
  *        Created:  12/11/14 16:38:24
- *       Revision:  none
- *       Compiler:  gcc
- *
- *         Author:  YOUR NAME (), 
- *        Company:  
- *
+ *         Author:  Rafael A. Rojas 
  * =====================================================================================
  */
 

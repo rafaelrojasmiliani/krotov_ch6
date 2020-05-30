@@ -44,47 +44,6 @@ all: 	libiteratorgdb.a libgslodeeventgdb.a \
 	mv libkrotovch6.a 		../build/lib
 	
 
-opt: 	libiterator.a libgslodeevent.a \
-		libaffinesys.a libsolcont.a libsolver.a
-	g++ $(Warning)  -O3 test.cpp -L. \
-			 -laffinesys -lgslodeevent \
-				-lsolver -literator   -lsolcont  -lgsl -lblas -o test
-
-ld: 	libiteratorgdb.a libgslodeeventgdb.a \
-		libaffinesysgdb.a libsolcontgdb.a libsolvergdb.a
-	g++ $(Warning)  -g3 testloaddata.cpp -L. \
-					 -laffinesysgdb \
-					-lgslodeeventgdb -lsolvergdb -literatorgdb -lsolcontgdb \
-					-lgsl -lblas -o test
-r: 	libiteratorgdb.a libgslodeeventgdb.a \
-		libaffinesysgdb.a libsolcontgdb.a libsolvergdb.a
-	g++ $(Warning)  -g3 testr.cpp -L. \
-					 -laffinesysgdb \
-					-lgslodeeventgdb -lsolvergdb -literatorgdb -lsolcontgdb \
-					-lgsl -lblas -o test
-
-optld: 	libiterator.a libgslodeevent.a \
-		libaffinesys.a libsolcont.a libsolver.a
-	g++ $(Warning)  -O3 testloaddata.cpp -L. \
-			 -laffinesys -lgslodeevent \
-				-lsolver -literator   -lsolcont  -lgsl -lblas -o test
-
-optr: 	libiterator.a libgslodeevent.a \
-		libaffinesys.a libsolcont.a libsolver.a
-	g++ $(Warning)  -O3 testr.cpp -L. \
-			 -laffinesys -lgslodeevent \
-				-lsolver -literator   -lsolcont  -lgsl -lblas -o test
-optt: 	libiterator.a libgslodeevent.a \
-		libaffinesys.a libsolcont.a libsolver.a
-	g++ $(Warning)  -O3 testthread.cpp -L. \
-			 -laffinesys -lgslodeevent \
-				-lsolver -literator   -lsolcont  -lgsl -lblas  -pthread -o test
-
-thread: 	libiteratorgdb.a libgslodeeventgdb.a \
-		libaffinesysgdb.a libsolcontgdb.a libsolvergdb.a
-	g++ $(Warning)  -g3 testthread.cpp -L. \
-			 -laffinesysgdb -lgslodeeventgdb \
-				-lsolvergdb -literatorgdb   -lsolcontgdb  -lgsl -lblas  -pthread -o test
 #{{{ solcont gdb
 libsolcontgdb.a: $(SRCSOLCONT:%.cpp=%gdb.o) 
 	ar cr $@ $(SRCSOLCONT:%.cpp=%gdb.o)

@@ -1,14 +1,10 @@
 /*!
  *       \file:  gslodeeventhermite.cpp
  *
- *		 \brief: DESCRIPTION
- *        Version:  1.0
+ *		 \brief: Hermite interplator implementation. 
  *        Created:  19/06/15 09:58:16
- *       Revision:  none
- *       Compiler:  gcc
  *
- *         Author:  YOUR NAME (), 
- *        Company:  
+ *         Author:  Rafael A. Rojas 
  *
  * =====================================================================================
  */

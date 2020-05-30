@@ -1,4 +1,15 @@
-
+/*!
+ *       \file:  indexvector.h
+ *
+ *		 \brief: Class to store indexes of another array.
+ *		         This class is intended to manipulated and analyse
+ *		         large arrays by using only their indexes.
+ *        Created:  19/06/15 09:58:16
+ *
+ *         Author:  Rafael A. Rojas 
+ *
+ * =====================================================================================
+ */
 #ifndef  INDEXVECTOR_INC
 #define  INDEXVECTOR_INC
 #include<vector>
@@ -8,9 +19,8 @@
 #include<stdio.h>
 #include<complex>
 using namespace Eigen;
-/** This class is used to represent a set of values in an array
- * by storing a set of indexes. 
- * It also provides functions to compare with other objects of
+/** This class is used to represent a set of values in an array by storing a
+ * set of indexes.  It also provides functions to compare with other objects of
  * the same class and remove rows or cols from matrix and vectors.  */
 class tIndexvector: public std::vector<size_t>{
 	public:

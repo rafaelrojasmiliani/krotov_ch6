@@ -1,14 +1,11 @@
 /*!
  *       \file:  affinesysaux.cpp
  *
- *		 \brief: DESCRIPTION
- *        Version:  1.0
- *        Created:  03/08/15 20:21:29
- *       Revision:  none
- *       Compiler:  gcc
+ *		 \brief: Base class to represent affine systems. 
+ *		 This  filem implements auxiliar functions for testing proposes
+ *        Created:  19/06/15 09:58:16
  *
- *         Author:  YOUR NAME (), 
- *        Company:  
+ *         Author:  Rafael A. Rojas 
  *
  * =====================================================================================
  */

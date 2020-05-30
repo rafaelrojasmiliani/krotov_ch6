@@ -1,3 +1,13 @@
+/*!
+ *       \file:  iteratordynsys.cpp
+ *		 \brief: This file contains the definition of the class which represent
+ *		 the process of iteration of the optimizers.
+ *		 In particular here we have the classes which implment the iterations
+ *		 as solution of ODES
+ *        Created:  12/11/14 17:06:45
+ *         Author:  Rafael A. Rojas 
+ * =====================================================================================
+ */
 
 #include"iterator.h"
 #include<assert.h>

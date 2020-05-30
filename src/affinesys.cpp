@@ -1,3 +1,13 @@
+/*!
+ *       \file:  affinesys.cpp
+ *
+ *		 \brief: Base class to represent affine systems. 
+ *        Created:  19/06/15 09:58:16
+ *
+ *         Author:  Rafael A. Rojas 
+ *
+ * =====================================================================================
+ */
 
 #include<eigen3/Eigen/Core>
 #include"indexvector.h"
@@ -98,6 +108,12 @@ void affinesys::computeSwichingVector(double t,
 
 			b-= h0.transpose();
 		}
+/*! Computes the derivative of the linear system corresponding to the switching vector w.r.t. the time.  
+ * \param t, time
+ * \param xin state
+ * \param *bout, derivate of the rhs of the linear system
+ * \param *Aout, derivate of the matrix in the lhs of the linear system
+*/  
 void affinesys::swichingVector_dt_LinSys(const double t,
 									const double xin[],
 									double *bout,double *Aout){
@@ -303,6 +319,11 @@ void affinesys::swichingVector_G1(double t,
 
 		}
 
+/*! Computes the partial derivative of the switching vector w.r.t. the time.  
+ * \param t, time
+ * \param xin state
+ * \param res, partial derivative of the switching vector
+*/  
 void affinesys::swichingVector_partial_dt(double t,
 									const double xin[],double *res){
 
@@ -342,6 +363,12 @@ void affinesys::swichingVector_partial_dt(double t,
 
 }
 
+/*! Test and print to stdout the Krotov's R function  
+ * \param t, time
+ * \param x state
+ * \param u control
+ * \param level, level of verbosity
+*/  
 void affinesys::testR(double t,const double x[],const double u[],int level){
 		
 

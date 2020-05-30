@@ -1,11 +1,14 @@
 /*!
  *       \file:  affinesyscontrol.cpp
  *
- *		 \brief: DESCRIPTION
- *        Version:  1.0
+ *		 \brief: Base class to represent affine systems. 
+ *		 This file implement method to compute the contro at each iteration of the krotov0s method.
+ *		 This is a very difficult task when the numer of control is larger than 1.
+ *		 In this version computeControl is just a first attemp to build a general functions, but there are theoretical  question to answer.
+ *		 The only functions that work correctly are compute_1Control and compute_2Control.
  *        Created:  23/07/15 21:44:04
- *       Revision:  none
- *       Compiler:  gcc
+ *
+ *         Author:  Rafael A. Rojas 
  *
  *         Author:  YOUR NAME (), 
  *        Company:  

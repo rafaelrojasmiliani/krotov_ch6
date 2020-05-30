@@ -1,5 +1,9 @@
 /*!
+ *       \file:  iterator.cpp
+ *		 \brief: This file contains the definition of the class which represent
+ *		 the process of iteration of the optimizers
  *        Created:  12/11/14 17:06:45
+ *         Author:  Rafael A. Rojas 
  * =====================================================================================
  */
 #include"iterator.h"
