@@ -6,7 +6,7 @@ from sympy import sympify  # Concert numbers in symbpy objects
 from sympy import symbols  # create sympy symbols
 from sympy import printing  # print sympy expressions in c++
 from sympy import diff  # differentiation
-from sympy import MatrixSymbol  # Matrices 
+from sympy import MatrixSymbol  # Matrices
 
 
 class modelConstructorSolver(object):
@@ -23,20 +23,23 @@ class modelConstructorSolver(object):
         self.funcion_symbols_ = []
         self.lagrange_symbols_ = []
         self.aux_func_symbols_ = {}
+        self.aux_func_t_symbols_ = {}
         self.aux_vars_symbols_ = []
 
         f0 = sympify(0)
         F = sympify(0)
         self.hamiltonian_ = sympify(0)
         fileName = _class_name.lower() + '.h'
-        self.output_file_ = open(_path+fileName.lower(), "w")
+        self.output_file_ = open(_path + fileName.lower(), "w")
         self.time_symbol_ = symbols('t')
         for i in range(0, self.state_dim_):
             self.state_symbols_.append(symbols('x[' + str(i) + ']', real=True))
             self.funcion_symbols_.append(sympify(0))
-            self.lagrange_symbols_.append(symbols('lambda[' + str(i) + ']', real=True))
+            self.lagrange_symbols_.append(
+                symbols('lambda[' + str(i) + ']', real=True))
         for i in range(0, self.control_dim_):
-            self.control_symbols_.append(symbols('u[' + str(i) + ']', real=True))
+            self.control_symbols_.append(
+                symbols('u[' + str(i) + ']', real=True))
 
     def getStateVar(self):
         return self.state_symbols_
@@ -52,7 +55,8 @@ class modelConstructorSolver(object):
         self.f0 = sympify(rc)
         self.F = sympify(fc)
         for i in range(0, self.state_dim_):
-            self.hamiltonian_ = self.hamiltonian_ + self.lagrange_symbols_[i] * self.funcion_symbols_[i]
+            self.hamiltonian_ = self.hamiltonian_ + \
+                self.lagrange_symbols_[i] * self.funcion_symbols_[i]
         self.hamiltonian_ = self.hamiltonian_ - self.f0
 
     def getHamiltonian(self):
@@ -63,6 +67,9 @@ class modelConstructorSolver(object):
 
     def appendAuxFunction(self, name, ex):
         self.aux_func_symbols_[name] = ex
+
+    def append_aux_func_t(self, name, ex):
+        self.aux_func_t_symbols_[name] = ex
 
     def create(self):
         self.writeClassHeader()
@@ -81,12 +88,13 @@ class c""" + self.class_name_ + """:public solver{
 
         for i in self.aux_vars_symbols_:
             self.output_file_.write("\tdouble %s;\n" % i.name)
-        self.output_file_.write("""
+        self.output_file_.write(
+            """
     c%(cn)s():\n\t\tsolver(%(dim)i,%(cdim)i,1.0e-3,20.0,x0)""" % {
-            'cn': self.class_name_,
-            'dim': self.state_dim_,
-            'cdim': self.control_dim_
-        })
+                'cn': self.class_name_,
+                'dim': self.state_dim_,
+                'cdim': self.control_dim_
+            })
         self.output_file_.write("\nu0(0.01)")
         for i in self.aux_vars_symbols_:
             self.output_file_.write(",\n\t\t%s ( 1.0 ) " % i.name)
@@ -107,10 +115,15 @@ class c""" + self.class_name_ + """:public solver{
     }\n""")
         self.output_file_.write("""
     virtual void controller0(double t,const double x[],double u[]){
-            u[0]=u0;
+""")
+        for u in self.control_symbols_:
+            self.output_file_.write('\t\t{:s} = 0.0;'.format(
+                printing.ccode(u)))
+
+        self.output_file_.write("""
     }\n\n""")
         self.output_file_.write("\tint dynSystem(double t,const double x[],"
-                       " const double u[], double xd[]){\n")
+                                " const double u[], double xd[]){\n")
 
         for i, ex in zip(range(0, self.state_dim_), self.funcion_symbols_):
             self.output_file_.write("\t\txd[%(n)i]= %(c)s;\n" % {
@@ -120,7 +133,7 @@ class c""" + self.class_name_ + """:public solver{
         self.output_file_.write("\t\treturn GSL_SUCCESS;\n\t}\n")
 
         self.output_file_.write("\tint dynSys_1Gx(double t,const double x[],"
-                       "const double u[],double dfdx[]){\n")
+                                "const double u[],double dfdx[]){\n")
 
         for i, fi in zip(range(0, self.state_dim_), self.funcion_symbols_):
             for j, sj in zip(range(0, self.state_dim_), self.state_symbols_):
@@ -134,15 +147,17 @@ class c""" + self.class_name_ + """:public solver{
         self.output_file_.write("""
     void dynSys_2Gxx(double t,const double x[],const double u[],
                                                              double dfdxx[]){\n"""
-                       )
+                                )
         counter = 0
         for i in range(0, self.state_dim_):
             for j in range(0, self.state_dim_):
                 for k in range(j, self.state_dim_):
-                    self.output_file_.write('\t\t dfdxx[' + str(counter) + ']= ')
                     self.output_file_.write(
-                        printing.ccode((diff(self.funcion_symbols_[i], self.state_symbols_[j],
-                                             self.state_symbols_[k])).evalf()) + ';\n')
+                        '\t\t dfdxx[' + str(counter) + ']= ')
+                    self.output_file_.write(
+                        printing.ccode((diff(
+                            self.funcion_symbols_[i], self.state_symbols_[j],
+                            self.state_symbols_[k])).evalf()) + ';\n')
                     counter = counter + 1
             self.output_file_.write("\n")
 
@@ -159,8 +174,11 @@ class c""" + self.class_name_ + """:public solver{
         for i in range(0, self.state_dim_):
             self.output_file_.write(
                 "\t\tdf0dx[%(n)d]= %(c)s;\n" % {
-                    'n': i,
-                    'c': printing.ccode((diff(self.f0, self.state_symbols_[i])).evalf())
+                    'n':
+                    i,
+                    'c':
+                    printing.ccode(
+                        (diff(self.f0, self.state_symbols_[i])).evalf())
                 })
         self.output_file_.write("\t}\n")
         self.output_file_.write("""
@@ -176,7 +194,8 @@ class c""" + self.class_name_ + """:public solver{
                         counter,
                         'c':
                         printing.ccode(
-                            diff(self.f0, self.state_symbols_[i], self.state_symbols_[j]).evalf())
+                            diff(self.f0, self.state_symbols_[i],
+                                 self.state_symbols_[j]).evalf())
                     })
                 counter = counter + 1
         self.output_file_.write("\t}\n")
@@ -190,12 +209,15 @@ class c""" + self.class_name_ + """:public solver{
         self.output_file_.write("""
     void finalCost_1Gx(double t,const double x[],const double u[],
                                                                     double *dFdx){\n"""
-                       )
+                                )
         for i in range(0, self.state_dim_):
             self.output_file_.write(
                 "\t\tdFdx[%(n)d]= %(c)s;\n" % {
-                    'n': i,
-                    'c': printing.ccode(diff(self.F, self.state_symbols_[i]).evalf())
+                    'n':
+                    i,
+                    'c':
+                    printing.ccode(
+                        diff(self.F, self.state_symbols_[i]).evalf())
                 })
         self.output_file_.write("\t}\n")
 
@@ -210,8 +232,8 @@ class c""" + self.class_name_ + """:public solver{
                         'n':
                         counter,
                         'c':
-                        printing.ccode(
-                            (diff(self.F, self.state_symbols_[i], self.state_symbols_[j])).evalf())
+                        printing.ccode((diff(self.F, self.state_symbols_[i],
+                                             self.state_symbols_[j])).evalf())
                     })
                 counter = counter + 1
         self.output_file_.write("\t}\n")
@@ -230,4 +252,11 @@ class c""" + self.class_name_ + """:public solver{
             self.output_file_.write(
                 printing.ccode(ex, MatrixSymbol('res', ex.shape[0],
                                                 ex.shape[1])))
+            self.output_file_.write('\n\t}\n')
+
+        for name, ex in self.aux_func_t_symbols_.items():
+            self.output_file_.write("""
+    double {:s}(double t){{
+        return {:s};
+            """.format(name, printing.ccode(ex)))
             self.output_file_.write('\n\t}\n')

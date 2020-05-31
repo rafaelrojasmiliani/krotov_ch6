@@ -184,6 +184,7 @@ class modelConstructorAffine(modelConstructorSolver):
 #define """ + self.class_name_.upper() + """_H
 
 #include<affinesys.h>
+#include<math.h>
 class c""" + self.class_name_ + """:public affinesys{
     public:
     double x0[%(dim)i];
