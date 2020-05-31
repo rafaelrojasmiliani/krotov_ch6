@@ -3,7 +3,7 @@
 This example computes the maximum energy that one can harvest from semi-actively controlled harmonic oscillator.
 To run do 
 
-``bash
+```bash
 make
 ./test
 ```
