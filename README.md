@@ -1,15 +1,22 @@
-# Krotov's Chaper 6
+# Krotov's Chapter 6
 
-This is library intended to compute Optimal Control Programs based in the Krotov's methodology introducint in the chapter 6 of his book.
+This is library intended to compute Optimal Control Programs based in the Krotov's methodology introduced in the Chapter 6 of his book.
 
 ### Dependencies
     
-    The package relies on the GNU Scientifi library 
+The package relies on the GNU Scientific library 
+
+
+## Compile
+
+```bash
+cd src && make
+```
 
 
 ## Authors
 
-* **Rafael A. Rojas** - *Initial work* - [Rafael Rojas](https://gitlab.inf.unibz.it/Rafael.Rojas)
+* **Rafael A. Rojas** - *Initial work* - [Rafael Rojas](https://github.com/rafaelrojasmiliani)
 
 
 ## License
