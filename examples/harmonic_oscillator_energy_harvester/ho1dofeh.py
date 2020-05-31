@@ -6,10 +6,8 @@ import sys
 import pdb
 from sympy import symbols
 from sympy import Function
+from sympy import sin
 from sympy import sympify
-from sympy import sqrt
-from sympy import solve
-from sympy import Matrix
 
 import pathlib
 
@@ -45,9 +43,11 @@ def main():
 
     mc.init(f, rc, fc)
 
-    mc.append_aux_func_t('etadd', y(t))
-    mc.appendAuxVar(zeta0)
-    mc.appendAuxVar(omega)
+    mc.append_aux_func_t('etadd', sin(omega*t))
+    mc.appendAuxVar(zeta0, sympify(0.1))
+    mc.appendAuxVar(omega, sympify(1.0))
+    mc.set_control0_val(0, sympify(0.5))
+    mc.set_control_limits(0, 0.0, 10.0)
     mc.create()
 
 

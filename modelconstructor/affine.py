@@ -174,9 +174,21 @@ class modelConstructorAffine(modelConstructorSolver):
     def create(self):
         self.writeClassHeader()
         self.writeSolverFuncs()
+        self.write_max_hamiltonian()
         self.writeAuxFuncs()
         self.writeAffineFuncs()
         self.writeClassClosure()
+
+    def write_max_hamiltonian(self):
+        if self.control_dim_ == 1:
+            self.output_file_.write("""
+    void maxHamiltonian(double t,const double x[],
+        const double lambda[],double u[]){
+
+            compute_1Control(t,x,umin,umax,u,1.0e-6);
+    }\n""")
+        else:
+            self.write_void_max_hamiltonian()
 
     def writeClassHeader(self):
         self.output_file_.write("""
@@ -188,6 +200,7 @@ class modelConstructorAffine(modelConstructorSolver):
 class c""" + self.class_name_ + """:public affinesys{
     public:
     double x0[%(dim)i];
+    double u0[%(adim)i];
     double umin[%(adim)i];
     double umax[%(adim)i];\n""" % {
             'dim': self.state_dim_,
@@ -205,10 +218,18 @@ class c""" + self.class_name_ + """:public affinesys{
                 'cdim': self.control_dim_,
                 'adim': self.adim
             })
-        for i in self.aux_vars_symbols_:
-            self.output_file_.write(",\n\t\t%s ( 1.0 ) " % i.name)
+        for i, ex in zip(self.aux_vars_symbols_, self.aux_vars_values_):
+            self.output_file_.write(",\n\t\t{:s} ( {:s} ) ".format(
+                i.name, printing.ccode(ex)))
 
         self.output_file_.write("\n\t{\n")
         for i in range(self.state_dim_):
             self.output_file_.write("\t\tx0[%i]= 0.0;\n" % i)
+        for i in range(self.control_dim_):
+            self.output_file_.write("\t\tu0[{:d}]= {:s};\n".format(
+                i, printing.ccode(self.control0_values_[i])))
+            self.output_file_.write("\t\tumax[{:d}]= {:s};\n".format(
+                i, printing.ccode(self.control_max_[i])))
+            self.output_file_.write("\t\tumin[{:d}]= {:s};\n".format(
+                i, printing.ccode(self.control_min_[i])))
         self.output_file_.write("\n\t}\n")

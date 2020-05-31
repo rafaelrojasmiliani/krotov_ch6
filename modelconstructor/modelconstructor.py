@@ -20,11 +20,15 @@ class modelConstructorSolver(object):
         self.class_name_ = _class_name
         self.state_symbols_ = []
         self.control_symbols_ = []
+        self.control0_values_ = []
+        self.control_max_ = []
+        self.control_min_ = []
         self.funcion_symbols_ = []
         self.lagrange_symbols_ = []
         self.aux_func_symbols_ = {}
         self.aux_func_t_symbols_ = {}
         self.aux_vars_symbols_ = []
+        self.aux_vars_values_ = []
 
         f0 = sympify(0)
         F = sympify(0)
@@ -40,6 +44,16 @@ class modelConstructorSolver(object):
         for i in range(0, self.control_dim_):
             self.control_symbols_.append(
                 symbols('u[' + str(i) + ']', real=True))
+            self.control0_values_.append(sympify(0.0))
+            self.control_min_.append(sympify(0.0))
+            self.control_max_.append(sympify(0.0))
+
+    def set_control0_val(self, _idx, _ex):
+        self.control0_values_[_idx] = _ex
+
+    def set_control_limits(self, _idx, _min, _max):
+        self.control_max_[_idx] = _max
+        self.control_min_[_idx] = _min
 
     def getStateVar(self):
         return self.state_symbols_
@@ -62,8 +76,9 @@ class modelConstructorSolver(object):
     def getHamiltonian(self):
         return self.hamiltonian_
 
-    def appendAuxVar(self, var):
+    def appendAuxVar(self, var, _val=sympify(0.0)):
         self.aux_vars_symbols_.append(var)
+        self.aux_vars_values_.append(var)
 
     def appendAuxFunction(self, name, ex):
         self.aux_func_symbols_[name] = ex
@@ -74,6 +89,7 @@ class modelConstructorSolver(object):
     def create(self):
         self.writeClassHeader()
         self.writeSolverFuncs()
+        self.write_void_max_hamiltonian()
         self.writeAuxFuncs()
         self.writeClassClosure()
 
@@ -108,17 +124,19 @@ class c""" + self.class_name_ + """:public solver{
     """)
         self.output_file_.close()
 
-    def writeSolverFuncs(self):
+    def write_void_max_hamiltonian(self):
         self.output_file_.write("""
     void maxHamiltonian(double t,const double x[],
         const double lambda[],double u[]){
     }\n""")
+
+    def writeSolverFuncs(self):
         self.output_file_.write("""
     virtual void controller0(double t,const double x[],double u[]){
 """)
-        for u in self.control_symbols_:
-            self.output_file_.write('\t\t{:s} = 0.0;'.format(
-                printing.ccode(u)))
+        for u, uval in zip(self.control_symbols_, self.control0_values_):
+            self.output_file_.write('\t\t{:s} = {:s};'.format(
+                printing.ccode(u), printing.ccode(uval)))
 
         self.output_file_.write("""
     }\n\n""")

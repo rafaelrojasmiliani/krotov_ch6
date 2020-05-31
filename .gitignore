@@ -2,4 +2,5 @@
 *.a
 .*.swp
 *.pyc
+*.dat
 build/*
